@@ -21,6 +21,11 @@
       "caption": "Fehlermeldung"
     },
     {
+      "type": "CheckBox",
+      "name": "UseTomorrow",
+      "caption": "Kompletten Folgetag (00–24 Uhr) statt der nächsten 24 Stunden anzeigen"
+    },
+    {
       "type": "NumberSpinner",
       "name": "PVPeakPower",
       "caption": "Installierte PV-Leistung in kWp",
@@ -46,6 +51,10 @@
     }
   ],
   "actions": [
+    {
+      "type": "Label",
+      "caption": "Für den kompletten Folgetag muss die ausgewählte JSON-Variable mindestens 48 Stunden Prognosedaten enthalten."
+    },
     {
       "type": "Button",
       "caption": "Kachel jetzt aktualisieren",
