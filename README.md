@@ -1,26 +1,53 @@
 # Solarwetter für IP-Symcon
 
-Native HTML-Kachel zur Darstellung einer stündlichen PV-Prognose in IP-Symcon ab Version 7.1.
+Eigenständiges IP-Symcon-Modul mit nativer HTML-Kachel zur Berechnung des erwarteten PV-Ertrags aus der Open-Meteo-Solarprognose.
+
+## Voraussetzungen
+
+- IP-Symcon ab Version 7.1
+- Internetzugriff auf `api.open-meteo.com`
+- keine zusätzlichen Skripte oder Datenvariablen erforderlich
+
+## Konfiguration
+
+- Breitengrad und Längengrad
+- Dachneigung
+- Open-Meteo-Azimut von -180° bis 180°; 0° entspricht Süden
+- Zeitzone
+- Abrufintervall, mindestens 300 Sekunden
+- installierte PV-Leistung in kWp
+- Performance Ratio
+- Wechselrichtergrenze in kW
+
+## Prognosezeiträume
+
+- nächste 24 Stunden
+- aktueller Kalendertag von 00:00 bis 24:00 Uhr
+- Folgetag von 00:00 bis 24:00 Uhr
 
 ## Funktionen
 
-- erwarteter PV-Ertrag der nächsten 24 Stunden
-- erwartete Leistungsspitze
-- Solarqualität
-- Balkendiagramm der nächsten zwölf Stunden
-- konfigurierbare Anlagenleistung, Performance Ratio und Wechselrichtergrenze
+- eigenständiger Abruf einer dreitägigen Open-Meteo-Prognose
+- bis zu drei HTTP-Versuche pro Aktualisierung
+- letzte gültige Prognose bleibt bei kurzen Ausfällen erhalten
+- erwarteter PV-Ertrag, Leistungsspitze und Solarqualität
+- Balkendiagramm der ersten zwölf Stunden des gewählten Zeitraums
+- automatische Status- und Ergebnisvariablen
 - keine festen Symcon-Objekt-IDs
-- automatische Ergebnisvariablen für PV-Ertrag, Leistungsspitze, Solarqualität, Datenstatus, Aktualisierungszeit und Fehler
-- wählbarer Prognosezeitraum: nächste 24 Stunden oder Kalendertag von 00:00 bis 24:00
-- im Kalendertag-Modus freie Auswahl zwischen aktuellem Tag und Folgetag
 
-## Datenformat
+## Berechnung
 
-Die ausgewählte JSON-Variable muss eine Liste stündlicher Datensätze mit mindestens `timestamp`, `solarRadiation` und optional `solarIndex` sowie `condition` enthalten.
+`Stundenenergie kWh = min(Wechselrichtergrenze; Globalstrahlung auf PV-Ebene / 1000 × kWp × Performance Ratio)`
+
+Die Open-Meteo-Strahlungsprognose wird mit Dachneigung und Ausrichtung direkt für die PV-Ebene abgerufen.
 
 ## Darstellung
 
 Für eine vollständige Darstellung wird eine Kachelgröße von mindestens 3 × 3 Feldern empfohlen.
+
+## Datenschutz und externe Dienste
+
+Das Modul überträgt Standortkoordinaten, Dachneigung, Ausrichtung und Zeitzone an Open-Meteo. Es werden keine Zugangsdaten benötigt.
 
 ## Lizenz
 
