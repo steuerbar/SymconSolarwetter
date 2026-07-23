@@ -1,0 +1,72 @@
+{
+  "elements": [
+    {
+      "type": "SelectVariable",
+      "name": "ForecastJSONID",
+      "caption": "Stündliche Prognose als JSON"
+    },
+    {
+      "type": "SelectVariable",
+      "name": "SourceTimeID",
+      "caption": "Zeitstempel der Prognose"
+    },
+    {
+      "type": "SelectVariable",
+      "name": "ValidID",
+      "caption": "Daten gültig"
+    },
+    {
+      "type": "SelectVariable",
+      "name": "ErrorID",
+      "caption": "Fehlermeldung"
+    },
+    {
+      "type": "NumberSpinner",
+      "name": "PVPeakPower",
+      "caption": "Installierte PV-Leistung in kWp",
+      "digits": 2,
+      "minimum": 0.1,
+      "maximum": 1000
+    },
+    {
+      "type": "NumberSpinner",
+      "name": "PerformanceRatio",
+      "caption": "Performance Ratio",
+      "digits": 2,
+      "minimum": 0.1,
+      "maximum": 1
+    },
+    {
+      "type": "NumberSpinner",
+      "name": "InverterLimit",
+      "caption": "Wechselrichtergrenze in kW",
+      "digits": 2,
+      "minimum": 0.1,
+      "maximum": 1000
+    }
+  ],
+  "actions": [
+    {
+      "type": "Button",
+      "caption": "Kachel jetzt aktualisieren",
+      "onClick": "SWK_UpdateTile($id);"
+    }
+  ],
+  "status": [
+    {
+      "code": 102,
+      "icon": "active",
+      "caption": "Aktiv"
+    },
+    {
+      "code": 104,
+      "icon": "inactive",
+      "caption": "Datenquellen unvollständig"
+    },
+    {
+      "code": 201,
+      "icon": "error",
+      "caption": "Datenquelle nicht verfügbar"
+    }
+  ]
+}
