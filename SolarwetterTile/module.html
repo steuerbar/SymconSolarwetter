@@ -26,17 +26,17 @@
         .metric strong { font-size:.82rem; }
         .chartbox { height:calc(100% - 151px); min-height:72px; margin-top:7px; padding:6px 8px; border:1px solid var(--line); border-radius:12px; }
         .charthead { display:flex; justify-content:space-between; height:14px; opacity:.58; font-size:.5rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
-        .chart { display:grid; grid-template-columns:repeat(12,1fr); align-items:end; gap:4px; height:calc(100% - 14px); padding-top:4px; }
+        .chart { display:grid; grid-template-columns:repeat(24,1fr); align-items:end; gap:2px; height:calc(100% - 14px); padding-top:4px; }
         .hour { display:grid; grid-template-rows:minmax(32px,1fr) 12px; gap:1px; min-width:0; text-align:center; }
         .track { position:relative; align-self:stretch; border-radius:5px 5px 3px 3px; background:color-mix(in srgb,var(--sun) 12%,Canvas); overflow:hidden; }
         .bar { position:absolute; inset:auto 0 0; min-height:2px; border-radius:5px 5px 2px 2px; background:linear-gradient(#ffd84c,#f29a24); }
-        .hour-value { position:absolute; z-index:2; inset:2px 0 auto; color:#72531b; font-size:.47rem; font-weight:850; text-align:center; }
-        .hour time { font-size:.47rem; opacity:.65; font-weight:700; }
+        .hour-value { position:absolute; z-index:2; inset:2px 0 auto; color:#72531b; font-size:.42rem; font-weight:850; text-align:center; }
+        .hour time { font-size:.44rem; opacity:.65; font-weight:700; }
         .empty { grid-column:1/-1; align-self:center; opacity:.62; font-size:.65rem; }
         .offline { position:absolute; z-index:9; inset:auto 18px 18px; padding:7px 10px; border:1px solid #dc4d5e; border-radius:9px; background:color-mix(in srgb,#dc4d5e 16%,Canvas); color:#b63144; font-size:.65rem; }
         [hidden] { display:none!important; }
         @keyframes spin { to { transform:rotate(360deg); } }
-        @media(max-width:430px){ .chart{gap:2px}.energy{font-size:1.55rem}.sun{flex-basis:60px;width:60px} }
+        @media(max-width:500px){ .hour-value{display:none}.chart{gap:1px}.energy{font-size:1.55rem}.sun{flex-basis:60px;width:60px} }
     </style>
 </head>
 <body>
@@ -52,7 +52,7 @@
 <script>
 const $=id=>document.getElementById(id),de=(v,d=0)=>Number(v).toFixed(d).replace('.',',');
 function label(q,e){if(e<1)return'Kaum PV-Ertrag zu erwarten';if(q>=75)return'Sehr gute PV-Aussichten';if(q>=50)return'Gute PV-Aussichten';if(q>=30)return'Wechselhafte PV-Aussichten';return'Geringe PV-Aussichten'}
-function render(s){$('periodLabel').textContent=s.periodLabel||'Nächste 24 Stunden';$('energy').textContent=de(s.energy,2);$('peak').textContent=de(s.peak,2);$('quality').textContent=de(s.quality);$('outlook').textContent=label(Number(s.quality),Number(s.energy));$('chart').replaceChildren();const max=Math.max(.01,...(s.hours||[]).map(h=>Number(h.expectedEnergy)));for(const h of s.hours||[]){const el=document.createElement('div');el.className='hour';const track=document.createElement('div');track.className='track';track.title=`${h.condition||''} · ${de(h.expectedEnergy,2)} kWh · ${h.radiation} W/m²`;const bar=document.createElement('i');bar.className='bar';bar.style.height=`${Math.max(3,Number(h.expectedEnergy)/max*100)}%`;const value=document.createElement('span');value.className='hour-value';value.textContent=de(h.expectedEnergy,1);track.append(bar,value);const time=document.createElement('time');time.textContent=h.timestamp?new Date(h.timestamp*1000).toLocaleTimeString('de-DE',{hour:'2-digit'}):'–';el.append(track,time);$('chart').append(el)}if(!$('chart').children.length){const e=document.createElement('div');e.className='empty';e.textContent='Noch keine Solarprognose verfügbar';$('chart').append(e)}$('offline').hidden=!!s.valid;$('offline').textContent=s.error||'Solarprognose ist momentan veraltet'}
+function render(s){$('periodLabel').textContent=s.periodLabel||'Nächste 24 Stunden';$('energy').textContent=de(s.energy,2);$('peak').textContent=de(s.peak,2);$('quality').textContent=de(s.quality);$('outlook').textContent=label(Number(s.quality),Number(s.energy));$('chart').replaceChildren();const hours=s.hours||[],max=Math.max(.01,...hours.map(h=>Number(h.expectedEnergy)));hours.forEach((h,i)=>{const el=document.createElement('div');el.className='hour';const track=document.createElement('div');track.className='track';track.title=`${h.condition||''} · ${de(h.expectedEnergy,2)} kWh · ${h.radiation} W/m²`;const bar=document.createElement('i');bar.className='bar';bar.style.height=`${Math.max(3,Number(h.expectedEnergy)/max*100)}%`;const value=document.createElement('span');value.className='hour-value';value.textContent=de(h.expectedEnergy,1);value.hidden=i%2!==0||Number(h.expectedEnergy)<.05;track.append(bar,value);const time=document.createElement('time');time.textContent=h.timestamp&&i%3===0?new Date(h.timestamp*1000).toLocaleTimeString('de-DE',{hour:'2-digit'}):'';el.append(track,time);$('chart').append(el)});if(!$('chart').children.length){const e=document.createElement('div');e.className='empty';e.textContent='Noch keine Solarprognose verfügbar';$('chart').append(e)}$('offline').hidden=!!s.valid;$('offline').textContent=s.error||'Solarprognose ist momentan veraltet'}
 function handleMessage(data){render(typeof data==='string'?JSON.parse(data):data)}render(__INITIAL_STATE__);
 </script>
 </body>
