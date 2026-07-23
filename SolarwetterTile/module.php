@@ -14,6 +14,12 @@ class SolarwetterKachel extends IPSModule
         $this->RegisterPropertyFloat('PVPeakPower', 10.53);
         $this->RegisterPropertyFloat('PerformanceRatio', 0.85);
         $this->RegisterPropertyFloat('InverterLimit', 8.0);
+        $this->RegisterVariableFloat('ForecastEnergy', 'PV-Ertrag nächste 24 Stunden', '', 10);
+        $this->RegisterVariableFloat('ForecastPeak', 'Erwartete Leistungsspitze', '', 20);
+        $this->RegisterVariableInteger('SolarQuality', 'Solarqualität', '~Intensity.100', 30);
+        $this->RegisterVariableBoolean('DataValid', 'Prognosedaten gültig', '~Switch', 40);
+        $this->RegisterVariableInteger('LastUpdate', 'Letzte Aktualisierung', '~UnixTimestamp', 50);
+        $this->RegisterVariableString('LastError', 'Fehlermeldung', '', 60);
         $this->RegisterTimer('TileUpdate', 60000, 'SWK_UpdateTile($_IPS["TARGET"]);');
         $this->SetVisualizationType(1);
     }
@@ -41,6 +47,12 @@ class SolarwetterKachel extends IPSModule
     public function UpdateTile()
     {
         $state = $this->GetState();
+        $this->SetValue('ForecastEnergy', (float) $state['energy']);
+        $this->SetValue('ForecastPeak', (float) $state['peak']);
+        $this->SetValue('SolarQuality', (int) $state['quality']);
+        $this->SetValue('DataValid', (bool) $state['valid']);
+        $this->SetValue('LastUpdate', time());
+        $this->SetValue('LastError', (string) $state['error']);
         $this->SetStatus($state['valid'] ? 102 : 201);
         $this->UpdateVisualizationValue((string) json_encode(
             $state,
