@@ -1,0 +1,14 @@
+{
+  "id": "{E2C76EEC-E710-42D6-A115-4C7283CC62AD}",
+  "name": "Solarwetter Kachel",
+  "type": 3,
+  "vendor": "steuerbar",
+  "aliases": [
+    "PV Prognose Kachel"
+  ],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "SWK",
+  "url": "https://github.com/steuerbar/SymconSolarwetter"
+}
