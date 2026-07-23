@@ -1,0 +1,12 @@
+{
+  "id": "{AFA12346-398E-4B7A-99CA-28DC36AB616E}",
+  "author": "steuerbar",
+  "name": "Solarwetter",
+  "url": "https://github.com/steuerbar/SymconSolarwetter",
+  "compatibility": {
+    "version": "7.1"
+  },
+  "version": "1.0",
+  "build": 1,
+  "date": 1784851200
+}
