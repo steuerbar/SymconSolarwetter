@@ -247,7 +247,7 @@ class SolarwetterKachel extends IPSModule
             'peak'        => $hours ? round(max(array_column($hours, 'expectedPower')), 2) : 0,
             'quality'     => $hours ? max(array_column($hours, 'index')) : 0,
             'periodLabel' => $periodLabel,
-            'hours'       => array_slice($hours, 0, 12)
+            'hours'       => array_slice($hours, 0, 24)
         ];
     }
 
