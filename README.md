@@ -31,7 +31,7 @@ Eigenständiges IP-Symcon-Modul mit nativer HTML-Kachel zur Berechnung des erwar
 - bis zu drei HTTP-Versuche pro Aktualisierung
 - letzte gültige Prognose bleibt bei kurzen Ausfällen erhalten
 - erwarteter PV-Ertrag, Leistungsspitze und Solarqualität
-- Balkendiagramm der ersten zwölf Stunden des gewählten Zeitraums
+- kompaktes Balkendiagramm aller 24 Stunden des gewählten Zeitraums
 - automatische Status- und Ergebnisvariablen
 - keine festen Symcon-Objekt-IDs
 
