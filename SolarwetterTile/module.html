@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        :root { color-scheme: light dark; --sun:#f5b927; --orange:#ef8f22; --green:#4ba96a; --line:color-mix(in srgb,currentColor 18%,transparent); font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif; }
+        * { box-sizing:border-box; }
+        html,body { margin:0; width:100%; height:100%; overflow:hidden; color:CanvasText; }
+        body { padding:8px; }
+        .card { position:relative; height:100%; min-height:250px; padding:10px; border:1px solid var(--line); border-radius:16px; background:color-mix(in srgb,Canvas 91%,transparent); overflow:hidden; }
+        .symcon-title-space { height:28px; min-height:28px; }
+        header { display:flex; align-items:center; justify-content:space-between; height:24px; }
+        .live { display:flex; align-items:center; gap:5px; opacity:.62; font-size:.62rem; }
+        .dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 9px color-mix(in srgb,var(--green) 55%,transparent); }
+        .badge { margin-right:34px; padding:5px 9px; border:1px solid color-mix(in srgb,var(--green) 45%,transparent); border-radius:9px; color:var(--green); font-size:.6rem; font-weight:850; }
+        .badge.stale { color:#dc4d5e; border-color:#dc4d5e; }
+        .main { display:grid; grid-template-columns:1.12fr .88fr; gap:9px; height:112px; margin-top:5px; }
+        .hero { display:flex; align-items:center; padding:8px 12px; border:1px solid color-mix(in srgb,var(--sun) 45%,transparent); border-radius:13px; background:linear-gradient(135deg,color-mix(in srgb,Canvas 92%,#fff6c5),color-mix(in srgb,Canvas 72%,#ffe173)); }
+        .sun { position:relative; flex:0 0 72px; width:72px; height:72px; display:grid; place-items:center; }
+        .sun:before { content:""; position:absolute; inset:3px; border:3px dashed var(--orange); border-radius:50%; animation:spin 14s linear infinite; }
+        .sun:after { content:""; width:45px; height:45px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#fff8a5,#ffc72f 58%,#ee8d1f); box-shadow:0 0 20px #f8b62f8c; }
+        .hero-copy { min-width:0; margin-left:8px; }
+        small { display:block; opacity:.58; font-size:.52rem; font-weight:800; letter-spacing:.07em; text-transform:uppercase; }
+        .energy { display:block; margin-top:3px; color:color-mix(in srgb,var(--orange) 78%,CanvasText); font-size:1.8rem; line-height:1; font-weight:850; letter-spacing:-.05em; white-space:nowrap; }
+        em { font-size:.58rem; font-style:normal; letter-spacing:0; }
+        .outlook { display:block; margin-top:6px; opacity:.7; font-size:.62rem; font-weight:750; }
+        .metrics { display:grid; grid-template-rows:repeat(2,1fr); gap:6px; }
+        .metric { display:flex; align-items:center; justify-content:space-between; padding:8px 9px; border:1px solid var(--line); border-radius:10px; }
+        .metric span { opacity:.62; font-size:.58rem; font-weight:760; }
+        .metric strong { font-size:.82rem; }
+        .chartbox { height:calc(100% - 175px); min-height:72px; margin-top:7px; padding:6px 8px; border:1px solid var(--line); border-radius:12px; }
+        .charthead { display:flex; justify-content:space-between; height:14px; opacity:.58; font-size:.5rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+        .chart { display:grid; grid-template-columns:repeat(12,1fr); align-items:end; gap:4px; height:calc(100% - 14px); padding-top:4px; }
+        .hour { display:grid; grid-template-rows:minmax(32px,1fr) 12px; gap:1px; min-width:0; text-align:center; }
+        .track { position:relative; align-self:stretch; border-radius:5px 5px 3px 3px; background:color-mix(in srgb,var(--sun) 12%,Canvas); overflow:hidden; }
+        .bar { position:absolute; inset:auto 0 0; min-height:2px; border-radius:5px 5px 2px 2px; background:linear-gradient(#ffd84c,#f29a24); }
+        .hour-value { position:absolute; z-index:2; inset:2px 0 auto; color:#72531b; font-size:.47rem; font-weight:850; text-align:center; }
+        .hour time { font-size:.47rem; opacity:.65; font-weight:700; }
+        .empty { grid-column:1/-1; align-self:center; opacity:.62; font-size:.65rem; }
+        .offline { position:absolute; z-index:9; inset:auto 18px 18px; padding:7px 10px; border:1px solid #dc4d5e; border-radius:9px; background:color-mix(in srgb,#dc4d5e 16%,Canvas); color:#b63144; font-size:.65rem; }
+        [hidden] { display:none!important; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        @media(max-width:430px){ .chart{gap:2px}.energy{font-size:1.55rem}.sun{flex-basis:60px;width:60px} }
+    </style>
+</head>
+<body>
+<section class="card">
+    <div class="symcon-title-space" aria-hidden="true"></div>
+    <header><span class="live"><i class="dot"></i><span id="updated">Live</span></span><span class="badge" id="badge">LIVE</span></header>
+    <div class="main">
+        <div class="hero"><div class="sun"></div><div class="hero-copy"><small>PV-Ertrag · nächste 24 h</small><strong class="energy"><span id="energy">–</span> <em>kWh</em></strong><span class="outlook" id="outlook">–</span></div></div>
+        <div class="metrics"><div class="metric"><span>Erwartete Spitze</span><strong><b id="peak">–</b> <em>kW</em></strong></div><div class="metric"><span>Solarqualität</span><strong><b id="quality">–</b> <em>%</em></strong></div></div>
+    </div>
+    <div class="chartbox"><div class="charthead"><span>PV-Ertrag je Stunde</span><span>kWh</span></div><div class="chart" id="chart"></div></div>
+    <div class="offline" id="offline" hidden></div>
+</section>
+<script>
+const $=id=>document.getElementById(id),de=(v,d=0)=>Number(v).toFixed(d).replace('.',',');
+function label(q,e){if(e<1)return'Kaum PV-Ertrag zu erwarten';if(q>=75)return'Sehr gute PV-Aussichten';if(q>=50)return'Gute PV-Aussichten';if(q>=30)return'Wechselhafte PV-Aussichten';return'Geringe PV-Aussichten'}
+function render(s){$('energy').textContent=de(s.energy,2);$('peak').textContent=de(s.peak,2);$('quality').textContent=de(s.quality);$('outlook').textContent=label(Number(s.quality),Number(s.energy));$('badge').textContent=s.valid?'LIVE':'VERALTET';$('badge').classList.toggle('stale',!s.valid);$('updated').textContent=s.sourceTime?new Date(s.sourceTime*1000).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}):'–';$('chart').replaceChildren();const max=Math.max(.01,...(s.hours||[]).map(h=>Number(h.expectedEnergy)));for(const h of s.hours||[]){const el=document.createElement('div');el.className='hour';const track=document.createElement('div');track.className='track';track.title=`${h.condition||''} · ${de(h.expectedEnergy,2)} kWh · ${h.radiation} W/m²`;const bar=document.createElement('i');bar.className='bar';bar.style.height=`${Math.max(3,Number(h.expectedEnergy)/max*100)}%`;const value=document.createElement('span');value.className='hour-value';value.textContent=de(h.expectedEnergy,1);track.append(bar,value);const time=document.createElement('time');time.textContent=h.timestamp?new Date(h.timestamp*1000).toLocaleTimeString('de-DE',{hour:'2-digit'}):'–';el.append(track,time);$('chart').append(el)}if(!$('chart').children.length){const e=document.createElement('div');e.className='empty';e.textContent='Noch keine Solarprognose verfügbar';$('chart').append(e)}$('offline').hidden=!!s.valid;$('offline').textContent=s.error||'Solarprognose ist momentan veraltet'}
+function handleMessage(data){render(typeof data==='string'?JSON.parse(data):data)}render(__INITIAL_STATE__);
+</script>
+</body>
+</html>
