@@ -23,7 +23,12 @@
     {
       "type": "CheckBox",
       "name": "UseTomorrow",
-      "caption": "Kompletten Folgetag (00–24 Uhr) statt der nächsten 24 Stunden anzeigen"
+      "caption": "Kalendertag (00–24 Uhr) statt der nächsten 24 Stunden anzeigen"
+    },
+    {
+      "type": "CheckBox",
+      "name": "CalendarDayTomorrow",
+      "caption": "Folgetag statt aktuellem Tag verwenden (nur im Kalendertag-Modus)"
     },
     {
       "type": "NumberSpinner",
@@ -53,7 +58,7 @@
   "actions": [
     {
       "type": "Label",
-      "caption": "Für den kompletten Folgetag muss die ausgewählte JSON-Variable mindestens 48 Stunden Prognosedaten enthalten."
+      "caption": "Für den Folgetag muss die ausgewählte JSON-Variable mindestens 48 Stunden Prognosedaten enthalten."
     },
     {
       "type": "Button",
