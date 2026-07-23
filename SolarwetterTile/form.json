@@ -1,34 +1,48 @@
 {
   "elements": [
     {
-      "type": "SelectVariable",
-      "name": "ForecastJSONID",
-      "caption": "Stündliche Prognose als JSON"
+      "type": "NumberSpinner",
+      "name": "Latitude",
+      "caption": "Breitengrad",
+      "digits": 6,
+      "minimum": -90,
+      "maximum": 90
     },
     {
-      "type": "SelectVariable",
-      "name": "SourceTimeID",
-      "caption": "Zeitstempel der Prognose"
+      "type": "NumberSpinner",
+      "name": "Longitude",
+      "caption": "Längengrad",
+      "digits": 6,
+      "minimum": -180,
+      "maximum": 180
     },
     {
-      "type": "SelectVariable",
-      "name": "ValidID",
-      "caption": "Daten gültig"
+      "type": "NumberSpinner",
+      "name": "RoofTilt",
+      "caption": "Dachneigung in Grad",
+      "digits": 1,
+      "minimum": 0,
+      "maximum": 90
     },
     {
-      "type": "SelectVariable",
-      "name": "ErrorID",
-      "caption": "Fehlermeldung"
+      "type": "NumberSpinner",
+      "name": "RoofAzimuth",
+      "caption": "Open-Meteo-Azimut in Grad (-180 bis 180)",
+      "digits": 1,
+      "minimum": -180,
+      "maximum": 180
     },
     {
-      "type": "CheckBox",
-      "name": "UseTomorrow",
-      "caption": "Kalendertag (00–24 Uhr) statt der nächsten 24 Stunden anzeigen"
+      "type": "ValidationTextBox",
+      "name": "Timezone",
+      "caption": "Zeitzone"
     },
     {
-      "type": "CheckBox",
-      "name": "CalendarDayTomorrow",
-      "caption": "Folgetag statt aktuellem Tag verwenden (nur im Kalendertag-Modus)"
+      "type": "NumberSpinner",
+      "name": "UpdateInterval",
+      "caption": "Abrufintervall in Sekunden",
+      "minimum": 300,
+      "maximum": 86400
     },
     {
       "type": "NumberSpinner",
@@ -53,17 +67,27 @@
       "digits": 2,
       "minimum": 0.1,
       "maximum": 1000
+    },
+    {
+      "type": "CheckBox",
+      "name": "UseTomorrow",
+      "caption": "Kalendertag (00–24 Uhr) statt der nächsten 24 Stunden anzeigen"
+    },
+    {
+      "type": "CheckBox",
+      "name": "CalendarDayTomorrow",
+      "caption": "Folgetag statt aktuellem Tag verwenden (nur im Kalendertag-Modus)"
     }
   ],
   "actions": [
     {
       "type": "Label",
-      "caption": "Für den Folgetag muss die ausgewählte JSON-Variable mindestens 48 Stunden Prognosedaten enthalten."
+      "caption": "Das Modul lädt die 72-Stunden-Prognose eigenständig von Open-Meteo. Bei kurzen Ausfällen bleibt die letzte gültige Prognose erhalten."
     },
     {
       "type": "Button",
-      "caption": "Kachel jetzt aktualisieren",
-      "onClick": "SWK_UpdateTile($id);"
+      "caption": "Wetterdaten jetzt abrufen",
+      "onClick": "SWK_UpdateData($id);"
     }
   ],
   "status": [
@@ -73,14 +97,9 @@
       "caption": "Aktiv"
     },
     {
-      "code": 104,
-      "icon": "inactive",
-      "caption": "Datenquellen unvollständig"
-    },
-    {
       "code": 201,
       "icon": "error",
-      "caption": "Datenquelle nicht verfügbar"
+      "caption": "Open-Meteo nicht verfügbar"
     }
   ]
 }
