@@ -10,6 +10,7 @@ Native HTML-Kachel zur Darstellung einer stündlichen PV-Prognose in IP-Symcon a
 - Balkendiagramm der nächsten zwölf Stunden
 - konfigurierbare Anlagenleistung, Performance Ratio und Wechselrichtergrenze
 - keine festen Symcon-Objekt-IDs
+- automatische Ergebnisvariablen für PV-Ertrag, Leistungsspitze, Solarqualität, Datenstatus, Aktualisierungszeit und Fehler
 
 ## Datenformat
 
