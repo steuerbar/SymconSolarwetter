@@ -11,6 +11,7 @@ class SolarwetterKachel extends IPSModule
         $this->RegisterPropertyInteger('SourceTimeID', 0);
         $this->RegisterPropertyInteger('ValidID', 0);
         $this->RegisterPropertyInteger('ErrorID', 0);
+        $this->RegisterPropertyBoolean('UseTomorrow', false);
         $this->RegisterPropertyFloat('PVPeakPower', 10.53);
         $this->RegisterPropertyFloat('PerformanceRatio', 0.85);
         $this->RegisterPropertyFloat('InverterLimit', 8.0);
@@ -83,7 +84,20 @@ class SolarwetterKachel extends IPSModule
         $ratio = max(0.1, min(1.0, $this->ReadPropertyFloat('PerformanceRatio')));
         $limit = max(0.1, $this->ReadPropertyFloat('InverterLimit'));
         $hours = [];
-        foreach (array_slice($raw, 0, 24) as $item) {
+        $periodLabel = 'Nächste 24 Stunden';
+        if ($this->ReadPropertyBoolean('UseTomorrow')) {
+            $start = strtotime('tomorrow 00:00');
+            $end = strtotime('+1 day', $start);
+            $raw = array_values(array_filter($raw, static function ($item) use ($start, $end): bool {
+                return is_array($item)
+                    && (int) ($item['timestamp'] ?? 0) >= $start
+                    && (int) ($item['timestamp'] ?? 0) < $end;
+            }));
+            $periodLabel = 'Morgen · 00–24 Uhr';
+        } else {
+            $raw = array_slice($raw, 0, 24);
+        }
+        foreach ($raw as $item) {
             if (!is_array($item)) {
                 continue;
             }
@@ -107,6 +121,7 @@ class SolarwetterKachel extends IPSModule
             'energy'     => round($energy, 2),
             'peak'       => $hours ? round(max(array_column($hours, 'expectedPower')), 2) : 0,
             'quality'    => $hours ? max(array_column($hours, 'index')) : 0,
+            'periodLabel'=> $periodLabel,
             'hours'      => array_slice($hours, 0, 12)
         ];
     }
