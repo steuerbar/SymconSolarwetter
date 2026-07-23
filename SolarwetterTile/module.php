@@ -12,6 +12,7 @@ class SolarwetterKachel extends IPSModule
         $this->RegisterPropertyInteger('ValidID', 0);
         $this->RegisterPropertyInteger('ErrorID', 0);
         $this->RegisterPropertyBoolean('UseTomorrow', false);
+        $this->RegisterPropertyBoolean('CalendarDayTomorrow', true);
         $this->RegisterPropertyFloat('PVPeakPower', 10.53);
         $this->RegisterPropertyFloat('PerformanceRatio', 0.85);
         $this->RegisterPropertyFloat('InverterLimit', 8.0);
@@ -86,14 +87,15 @@ class SolarwetterKachel extends IPSModule
         $hours = [];
         $periodLabel = 'Nächste 24 Stunden';
         if ($this->ReadPropertyBoolean('UseTomorrow')) {
-            $start = strtotime('tomorrow 00:00');
+            $tomorrow = $this->ReadPropertyBoolean('CalendarDayTomorrow');
+            $start = $tomorrow ? strtotime('tomorrow 00:00') : strtotime('today 00:00');
             $end = strtotime('+1 day', $start);
             $raw = array_values(array_filter($raw, static function ($item) use ($start, $end): bool {
                 return is_array($item)
                     && (int) ($item['timestamp'] ?? 0) >= $start
                     && (int) ($item['timestamp'] ?? 0) < $end;
             }));
-            $periodLabel = 'Morgen · 00–24 Uhr';
+            $periodLabel = $tomorrow ? 'Morgen · 00–24 Uhr' : 'Heute · 00–24 Uhr';
         } else {
             $raw = array_slice($raw, 0, 24);
         }
