@@ -2,6 +2,8 @@
 
 Eigenständiges IP-Symcon-Modul mit nativer HTML-Kachel zur Berechnung des erwarteten PV-Ertrags aus der Open-Meteo-Solarprognose.
 
+Die 24-Stunden-Grafik zeigt die Stunden ohne den Zusatz „Uhr“ und stellt die Ertragswerte platzsparend gedreht direkt in den Balken dar.
+
 ## Voraussetzungen
 
 - IP-Symcon ab Version 7.1
