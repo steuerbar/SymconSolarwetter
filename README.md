@@ -14,12 +14,29 @@ Die 24-Stunden-Grafik zeigt die Stunden ohne den Zusatz „Uhr“ und stellt die
 
 - Breitengrad und Längengrad
 - Dachneigung
-- Open-Meteo-Azimut von -180° bis 180°; 0° entspricht Süden
+- Open-Meteo-Azimut für die Himmelsrichtung der Modulfläche
 - Zeitzone
 - Abrufintervall, mindestens 300 Sekunden
 - installierte PV-Leistung in kWp
 - Performance Ratio
 - Wechselrichtergrenze in kW
+
+### Open-Meteo-Azimut richtig einstellen
+
+Der Azimut beschreibt, **in welche Himmelsrichtung die Vorderseite der Solarmodule zeigt**. Open-Meteo verwendet dabei Süden als Ausgangspunkt. Das unterscheidet sich von einem klassischen Kompass, bei dem Norden normalerweise 0° ist.
+
+![Open-Meteo-Azimut: Kompass und typische Werte](docs/open-meteo-azimut.svg)
+
+| Ausrichtung der Module | Eingabewert |
+|---|---:|
+| Nord | `-180°` oder `180°` |
+| Ost | `-90°` |
+| Südost | `-45°` |
+| Süd | `0°` |
+| Südwest | `45°` |
+| West | `90°` |
+
+Zwischenwerte sind ebenfalls möglich. Zeigt ein Dach beispielsweise genau zwischen Süden und Westen, wird `45°` eingetragen. Bei einer Ost-West-Anlage bildet eine einzelne Ausrichtung beide Dachseiten nur näherungsweise ab; für getrennte Prognosen können zwei Modulinstanzen mit `-90°` und `90°` verwendet werden.
 
 ## Prognosezeiträume
 
