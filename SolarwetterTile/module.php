@@ -113,11 +113,16 @@ class SolarwetterKachel extends IPSModule
         $timezone = $this->ValidTimezone();
         $hourly = implode(',', [
             'temperature_2m',
+            'apparent_temperature',
+            'relative_humidity_2m',
             'weather_code',
             'is_day',
             'cloud_cover',
             'precipitation_probability',
             'precipitation',
+            'rain',
+            'wind_speed_10m',
+            'wind_direction_10m',
             'shortwave_radiation',
             'direct_radiation',
             'diffuse_radiation',
@@ -129,7 +134,7 @@ class SolarwetterKachel extends IPSModule
             . '&hourly=' . rawurlencode($hourly)
             . '&tilt=' . rawurlencode((string) $tilt)
             . '&azimuth=' . rawurlencode((string) $azimuth)
-            . '&forecast_days=3'
+            . '&forecast_days=4'
             . '&timezone=' . rawurlencode($timezone);
 
         $raw = $this->HttpGet($url);
@@ -149,12 +154,21 @@ class SolarwetterKachel extends IPSModule
                 'time'           => $date->format(DateTimeInterface::ATOM),
                 'timestamp'      => $date->getTimestamp(),
                 'temperature'    => (float) ($hourlyData['temperature_2m'][$index] ?? 0),
+                'apparentTemperature' => (float) ($hourlyData['apparent_temperature'][$index] ?? 0),
+                'humidity'       => (int) round((float) ($hourlyData['relative_humidity_2m'][$index] ?? 0)),
                 'weatherCode'    => $code,
                 'isDay'          => ((int) ($hourlyData['is_day'][$index] ?? 0)) === 1,
                 'cloudCover'     => (int) ($hourlyData['cloud_cover'][$index] ?? 0),
+                'precipitationProbability' => (int) round((float) ($hourlyData['precipitation_probability'][$index] ?? 0)),
                 'precipitation'  => (float) ($hourlyData['precipitation'][$index] ?? 0),
+                'rain'           => (float) ($hourlyData['rain'][$index] ?? 0),
+                'windSpeed'      => (float) ($hourlyData['wind_speed_10m'][$index] ?? 0),
+                'windDirection'  => (float) ($hourlyData['wind_direction_10m'][$index] ?? 0),
                 'condition'      => $this->WeatherLabel($code),
                 'solarRadiation' => round($radiation, 1),
+                'shortwaveRadiation' => max(0.0, (float) ($hourlyData['shortwave_radiation'][$index] ?? 0)),
+                'directRadiation' => max(0.0, (float) ($hourlyData['direct_radiation'][$index] ?? 0)),
+                'diffuseRadiation' => max(0.0, (float) ($hourlyData['diffuse_radiation'][$index] ?? 0)),
                 'solarIndex'     => min(100, (int) round($radiation / 8))
             ];
         }
@@ -175,7 +189,7 @@ class SolarwetterKachel extends IPSModule
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_CONNECTTIMEOUT => 8,
             CURLOPT_TIMEOUT => 25,
-            CURLOPT_USERAGENT => 'Symcon-Solarwetter/2.4',
+            CURLOPT_USERAGENT => 'Symcon-Solarwetter/2.5',
             CURLOPT_HTTPHEADER => ['Accept: application/json', 'Accept-Language: de']
         ]);
         $data = curl_exec($ch);
