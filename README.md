@@ -46,7 +46,8 @@ Zwischenwerte sind ebenfalls möglich. Zeigt ein Dach beispielsweise genau zwisc
 
 ## Funktionen
 
-- eigenständiger Abruf einer dreitägigen Open-Meteo-Prognose
+- eigenständiger Open-Meteo-Abruf mit mindestens 72 zukünftigen Prognosestunden
+- zentrale Prognosequelle für nachgelagerte Skripte und das Energiemanagement
 - bis zu drei HTTP-Versuche pro Aktualisierung
 - letzte gültige Prognose bleibt bei kurzen Ausfällen erhalten
 - erwarteter PV-Ertrag, Leistungsspitze und Solarqualität
