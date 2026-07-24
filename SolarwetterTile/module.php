@@ -175,7 +175,7 @@ class SolarwetterKachel extends IPSModule
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_CONNECTTIMEOUT => 8,
             CURLOPT_TIMEOUT => 25,
-            CURLOPT_USERAGENT => 'IP-Symcon-Solarwetter/2.0',
+            CURLOPT_USERAGENT => 'Symcon-Solarwetter/2.4',
             CURLOPT_HTTPHEADER => ['Accept: application/json', 'Accept-Language: de']
         ]);
         $data = curl_exec($ch);
